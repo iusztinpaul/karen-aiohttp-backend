@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from .views import CommandWebSocketView, StatusWebSocketView
+from .views import CommandWebSocketView, StatusWebSocketView, VideoWebSocketView
 
 ROUTERS = (
     ('GET', '/command', CommandWebSocketView, 'command_view'),
-    ('GET', '/status', StatusWebSocketView, 'status_view')
+    ('GET', '/status', StatusWebSocketView, 'status_view'),
+    ('GET', '/video', VideoWebSocketView, 'video_view')
 )
 
 

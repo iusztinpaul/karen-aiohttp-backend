@@ -62,11 +62,13 @@ class BaseWebSocketView(web.View):
         pass
 
 
-class CommandWebSocketView(BaseWebSocketView):
+class DroneWebSocketView(BaseWebSocketView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.dc = get_drone_controller()
 
+
+class CommandWebSocketView(DroneWebSocketView):
     async def handler(self, websocket):
         while True:
             command = await websocket.receive_str()
@@ -102,11 +104,7 @@ class CommandWebSocketView(BaseWebSocketView):
                 self.dc.flip_r()
 
 
-class StatusWebSocketView(BaseWebSocketView):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.dc = get_drone_controller()
-
+class StatusWebSocketView(DroneWebSocketView):
     async def handler(self, websocket):
         while True:
             await websocket.send_json({
@@ -116,3 +114,9 @@ class StatusWebSocketView(BaseWebSocketView):
                 'flight_time': self.dc.get_flight_time()
             })
             await asyncio.sleep(2)
+
+
+class VideoWebSocketView(DroneWebSocketView):
+    async def handler(self, websocket):
+        for video_package in self.dc.get_video_package():
+            await websocket.send_bytes(video_package)
