@@ -1,3 +1,4 @@
+import re
 import socket
 import time
 import threading
@@ -8,72 +9,76 @@ import numpy as np
 MAX_TIME_OUT = 15.0
 
 
-# class VideoReceiver:
-#     def __init__(self, cmd_socket, tello_ip, tello_port):
-#         self.decoder = libh264decoder.H264Decoder()
-#         self.socket_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # socket for receiving video stream
-#         self.local_video_port = 11111  # port for receiving video stream
-#         self.frame = None  # numpy array BGR -- current camera output frame
-#
-#         self.tello_address = (tello_ip, tello_port)
-#
-#         self.cmd_socket = cmd_socket
-#
-#         # thread for receiving cmd ack
-#         self.receive_thread = threading.Thread(target=self._receive_video_thread)
-#         self.receive_thread.daemon = True
-#
-#         self.receive_thread.start()
-#
-#         self.socket_video.bind(('', self.local_video_port))
-#
-#     def _receive_video_thread(self):
-#         """
-#         Listens for video streaming (raw h264) from the Tello.
-#
-#         Runs as a thread, sets self.frame to the most recent frame Tello captured.
-#
-#         """
-#         packet_data = ""
-#         while True:
-#             print('Loop')
-#             try:
-#                 res_string, ip = self.socket_video.recvfrom(2048)
-#                 packet_data += res_string
-#                 # end of frame
-#                 if len(res_string) != 1460:
-#                     print(packet_data)
-#                     for frame in self._h264_decode(packet_data):
-#                         self.frame = frame
-#                     packet_data = ""
-#             except socket.error as exc:
-#                 print("Caught exception socket.error : %s" % exc)
-#
-#     def _h264_decode(self, packet_data):
-#         """
-#         decode raw h264 format data from Tello
-#
-#         :param packet_data: raw h264 data array
-#
-#         :return: a list of decoded frame
-#         """
-#         res_frame_list = []
-#         frames = self.decoder.decode(packet_data)
-#         for framedata in frames:
-#             (frame, w, h, ls) = framedata
-#             if frame is not None:
-#                 # print 'frame size %i bytes, w %i, h %i, linesize %i' % (len(frame), w, h, ls)
-#
-#                 frame = np.fromstring(frame, dtype=np.ubyte, count=len(frame), sep='')
-#                 frame = (frame.reshape((h, ls / 3, 3)))
-#                 frame = frame[:, :w, :]
-#                 res_frame_list.append(frame)
-#
-#         return res_frame_list
-#
-#     def send_stream_cmd(self):
-#         self.cmd_socket.sendto(b'command', self.tello_address)
-#         self.cmd_socket.sendto(b'streamon', self.tello_address)
+class VideoReceiver:
+    def __init__(self, cmd_socket, tello_ip, tello_port):
+        # self.decoder = libh264decoder.H264Decoder()
+        self.socket_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # socket for receiving video stream
+        self.local_video_port = 11111  # port for receiving video stream
+        self.frame = None  # numpy array BGR -- current camera output frame
+
+        self.tello_address = (tello_ip, tello_port)
+
+        self.cmd_socket = cmd_socket
+
+        # thread for receiving cmd ack
+        self.receive_thread = threading.Thread(target=self._receive_video_thread)
+        self.receive_thread.daemon = True
+
+        self.receive_thread.start()
+
+        self.socket_video.bind(('', self.local_video_port))
+
+    def _receive_video_thread(self):
+        """
+        Listens for video streaming (raw h264) from the Tello.
+
+        Runs as a thread, sets self.frame to the most recent frame Tello captured.
+
+        """
+        packet_data = ""
+        while True:
+            print('Loop')
+            try:
+                res_string, ip = self.socket_video.recvfrom(2048)
+                packet_data += str(res_string)
+                # end of frame
+                if len(res_string) != 1460:
+                    with open('data', 'wb') as f:
+                        print('WRITE FILE')
+                        f.write(res_string)
+
+                    break
+                    # for frame in self._h264_decode(packet_data):
+                    #     self.frame = frame
+                    packet_data = ""
+            except socket.error as exc:
+                print("Caught exception socket.error : %s" % exc)
+
+    # def _h264_decode(self, packet_data):
+    #     """
+    #     decode raw h264 format data from Tello
+    #
+    #     :param packet_data: raw h264 data array
+    #
+    #     :return: a list of decoded frame
+    #     """
+    #     res_frame_list = []
+    #     frames = self.decoder.decode(packet_data)
+    #     for framedata in frames:
+    #         (frame, w, h, ls) = framedata
+    #         if frame is not None:
+    #             # print 'frame size %i bytes, w %i, h %i, linesize %i' % (len(frame), w, h, ls)
+    #
+    #             frame = np.fromstring(frame, dtype=np.ubyte, count=len(frame), sep='')
+    #             frame = (frame.reshape((h, ls / 3, 3)))
+    #             frame = frame[:, :w, :]
+    #             res_frame_list.append(frame)
+    #
+    #     return res_frame_list
+
+    def send_stream_cmd(self):
+        self.cmd_socket.sendto(b'command', self.tello_address)
+        self.cmd_socket.sendto(b'streamon', self.tello_address)
 
 
 class CmdController:
@@ -117,7 +122,11 @@ class CmdController:
         if self.response is None:
             response = 'none_response'
         else:
-            response = self.response.decode('utf-8')
+            try:
+                response = self.response.decode('utf-8')
+            except UnicodeDecodeError as e:
+                print(f'UnicodeDecodeError: {e}')
+                response = 'none_response'
 
         self.response = None
 
@@ -254,20 +263,24 @@ class CmdController:
             int: response of tello.
 
         """
-        return self.response
+        response = self.response
+        return response
 
     def get_height(self):
         """Returns height(dm) of tello.
 
         Returns:
-            int: Height(dm) of tello.
+            str: Height(dm) of tello.
 
         """
         height = self.send_command('height?')
-        height = str(height)
-        height = filter(str.isdigit, height)
-        self.last_height = height
-        print(f'height: {height}')
+
+        try:
+            height = str(height)
+            self.last_height = height
+        except:
+            height = self.last_height
+            pass
 
         return height
 
@@ -275,40 +288,37 @@ class CmdController:
         """Returns percent battery life remaining.
 
         Returns:
-            int: Percent battery life remaining.
+            str: Percent battery life remaining.
 
         """
 
         battery = self.send_command('battery?')
-        print(f'battery: {battery}')
 
-        return battery
+        return str(battery)
 
     def get_flight_time(self):
         """Returns the number of seconds elapsed during flight.
 
         Returns:
-            int: Seconds elapsed during flight.
+            str: Seconds elapsed during flight.
 
         """
 
         flight_time = self.send_command('time?')
-        print(f'flight_time: {flight_time}')
 
-        return flight_time
+        return str(flight_time)
 
     def get_speed(self):
         """Returns the current speed.
 
         Returns:
-            int: Current speed in KPH or MPH.
+            str: Current speed in KPH or MPH.
 
         """
 
         speed = self.send_command('speed?')
-        print(f'speed: {speed}')
 
-        return speed
+        return str(speed)
 
     def land(self):
         """Initiates landing.
@@ -440,14 +450,23 @@ class CmdController:
 class DroneController:
     def __init__(self, local_ip='', local_port=8889, tello_ip='192.168.10.1', tello_port=8889):
         self.tello_address = (tello_ip, tello_port)
-
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind((local_ip, local_port))
+        self.socket = self._create_socket(local_ip, local_port)
 
         self._cmd_controller = CmdController(self.socket, self.tello_address)
 
-        # self._video_receiver = VideoReceiver(self.cmd_socket, *self.tello_adderss)
-        # self._video_receiver.send_stream_cmd()
+        self._video_receiver = VideoReceiver(self.socket, *self.tello_address)
+        self._video_receiver.send_stream_cmd()
+
+    def _create_socket(self, local_ip, local_port):
+        while True:
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                s.bind((local_ip, local_port))
+                return s
+            except OSError as e:
+                print(f'Error on creating socket. Retrying in 0.5s : {e}')
+                time.sleep(0.5)
+
 
     def land(self):
         self._cmd_controller.land()
@@ -479,14 +498,40 @@ class DroneController:
     def rotate_ccw(self):
         self._cmd_controller.rotate_ccw(15)
 
+    def flip_f(self):
+        self._cmd_controller.flip('f')
+
+    def flip_b(self):
+        self._cmd_controller.flip('b')
+
+    def flip_l(self):
+        self._cmd_controller.flip('l')
+
+    def flip_r(self):
+        self._cmd_controller.flip('r')
+
     def get_speed(self):
-        self._cmd_controller.get_speed()
+        speed = self._cmd_controller.get_speed()
+        return self._correct_data(speed)
 
     def get_height(self):
-        self._cmd_controller.get_height()
+        height = self._cmd_controller.get_height()
+        return self._correct_data(height)
 
     def get_battery(self):
-        self._cmd_controller.get_battery()
+        battery = self._cmd_controller.get_battery()
+        return self._correct_data(battery)
 
     def get_flight_time(self):
-        self._cmd_controller.get_flight_time()
+        flight_time = self._cmd_controller.get_flight_time()
+        return self._correct_data(flight_time)
+
+    def _correct_data(self, data: str):
+        if data:
+            match = re.search(r'(?P<number_data>[0-9]*)', data)
+            data = match and match.group('number_data')
+
+            if data:
+                return data
+
+        return None

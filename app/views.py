@@ -92,6 +92,14 @@ class CommandWebSocketView(BaseWebSocketView):
                 self.dc.rotate_cw()
             elif command == Commands.R_CCW:
                 self.dc.rotate_ccw()
+            elif command == Commands.F_B:
+                self.dc.flip_b()
+            elif command == Commands.F_F:
+                self.dc.flip_f()
+            elif command == Commands.F_L:
+                self.dc.flip_l()
+            elif command == Commands.F_R:
+                self.dc.flip_r()
 
 
 class StatusWebSocketView(BaseWebSocketView):
@@ -101,12 +109,10 @@ class StatusWebSocketView(BaseWebSocketView):
 
     async def handler(self, websocket):
         while True:
-            json_to_send = {
+            await websocket.send_json({
                 'battery': self.dc.get_battery(),
                 'height': self.dc.get_height(),
                 'speed': self.dc.get_speed(),
                 'flight_time': self.dc.get_flight_time()
-            }
-            print("JSON: ", json_to_send)
-            await websocket.send_json(json_to_send)
+            })
             await asyncio.sleep(2)

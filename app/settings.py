@@ -9,3 +9,7 @@ class Commands:
     DOWN = 'DOWN'
     R_CW = 'R_CW'
     R_CCW = 'R_CCW'
+    F_R = 'F_R'
+    F_L = 'F_L'
+    F_F = 'F_F'
+    F_B = 'F_B'
