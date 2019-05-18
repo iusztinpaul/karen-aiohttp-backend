@@ -1,38 +1,46 @@
+import logging
+import os
 import re
 import socket
 import time
 import threading
+
 from multiprocessing.pool import ThreadPool
 
-import numpy as np
+import ffmpeg
+
+logger = logging.getLogger(__name__)
 
 
 MAX_TIME_OUT = 15.0
 
 
 class VideoReceiver:
-    def __init__(self, cmd_socket, tello_ip, tello_port):
-        # self.decoder = libh264decoder.H264Decoder()
+    VS_UDP_IP = '0.0.0.0'
+    VS_UDP_PORT = 11111
 
-        self.frame = None  # numpy array BGR -- current camera output frame
-        self._get_video = True
+    H265_BATCH_SIZE = 100
 
+    def __init__(self, tello_ip, tello_port):
         self.tello_address = (tello_ip, tello_port)
+        self.cap = None
 
-        self.cmd_socket = cmd_socket
+        self.grabbed = None
+        self.frame = None
+        self.stopped = False
 
         self.socket_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # socket for receiving video stream
-        self.local_video_port = 11111  # port for receiving video stream
+        self.socket_video.bind(('', self.VS_UDP_PORT))
 
-        self.socket_video.bind(('', self.local_video_port))
+        self.receive_raw_video_thread = threading.Thread(target=self._receive_raw_data_handler)
 
-    def get_video_package(self):
-        pool = ThreadPool(processes=1)
-        async_result = pool.apply_async(self._receive_video_handler)
+        self.pipe_h264 = (
+            ffmpeg
+                .input('pipe:0', format='rawvideo')
+                .output('../stream', format='hls', start_number=0, hls_time=1, hls_list_size=0)
+        )
 
-        return async_result.get()
-
-    def _receive_video_handler(self):
+    def _receive_raw_data_handler(self):
         """
         Listens for video streaming (raw h264) from the Tello.
 
@@ -40,45 +48,44 @@ class VideoReceiver:
 
         """
         packet_data = b''
-        while self._get_video:
+
+        while not self.stopped:
             try:
                 res_string, ip = self.socket_video.recvfrom(2048)
                 packet_data += res_string
                 # end of frame
                 if len(res_string) != 1460:
-                    for frame in self._h264_decode(packet_data):
-                        self.frame = frame
-                    yield packet_data
-                    packet_data = b''
-            except socket.error as exc:
-                print("Caught exception socket.error : %s".format(exc))
+                    self.pipe_h264.stdin.write(packet_data)
 
-        self._get_video = True
+                    packet_data = b''
+
+            except socket.error as exc:
+                print("Caught exception socket.error : {}".format(exc))
+
+        self.stopped = False
+
+    def get_batch_file_path(self):
+        pool = ThreadPool(processes=1)
+        async_result = pool.apply_async(self._remove_m3u8_handler, (m3u8_dir_path, ))
+
+        return async_result.get()
+
+    def _remove_m3u8_handler(self, m3u8_dir_path):
+        yield m3u8_dir_path
+
+        if os.path.exists(m3u8_dir_path):
+            os.remove(m3u8_dir_path)
+
+    def start_video(self):
+        self.receive_raw_video_thread.start()
+        self.h264_to_m3u8_filter.filter()
 
     def stop_video(self):
-        self._get_video = False
+        self.stopped = True
+        self.h264_to_m3u8_filter.stop()
 
-    def _h264_decode(self, packet_data):
-        """
-        decode raw h264 format data from Tello
-
-        :param packet_data: raw h264 data array
-
-        :return: a list of decoded frame
-        """
-        res_frame_list = []
-        frames = self.decoder.decode(packet_data)
-        for framedata in frames:
-            (frame, w, h, ls) = framedata
-            if frame is not None:
-                # print 'frame size %i bytes, w %i, h %i, linesize %i' % (len(frame), w, h, ls)
-
-                frame = np.fromstring(frame, dtype=np.ubyte, count=len(frame), sep='')
-                frame = (frame.reshape((h, ls / 3, 3)))
-                frame = frame[:, :w, :]
-                res_frame_list.append(frame)
-
-        return res_frame_list
+        self.pipe_h264.clear()
+        self.pipe_m3u8.clear()
 
 
 class CmdController:
@@ -91,6 +98,8 @@ class CmdController:
         self.command_timeout = command_timeout
         self.imperial = imperial
         self.last_height = 0
+
+        self.lock = threading.Lock()
 
         self._command_thread = threading.Thread(target=self._send_command_handler)
         self._command_thread.start()
@@ -107,28 +116,33 @@ class CmdController:
 
         """
 
-        print(">> send cmd: {}".format(command))
-        self.abort_flag = False
-        timer = threading.Timer(self.command_timeout, self.set_abort_flag)
+        try:
+            self.lock.acquire(True, timeout=0.05)
 
-        self.socket.sendto(command.encode('utf-8'), self.tello_address)
+            print(">> send cmd: {}".format(command))
+            self.abort_flag = False
+            timer = threading.Timer(self.command_timeout, self.set_abort_flag)
 
-        timer.start()
-        while self.response is None:
-            if self.abort_flag is True:
-                break
-        timer.cancel()
+            self.socket.sendto(command.encode('utf-8'), self.tello_address)
 
-        if self.response is None:
-            response = 'none_response'
-        else:
-            try:
-                response = self.response.decode('utf-8')
-            except UnicodeDecodeError as e:
-                print(f'UnicodeDecodeError: {e}')
+            timer.start()
+            while self.response is None:
+                if self.abort_flag is True:
+                    break
+            timer.cancel()
+
+            if self.response is None:
                 response = 'none_response'
+            else:
+                try:
+                    response = self.response.decode('utf-8')
+                except UnicodeDecodeError as e:
+                    print(f'UnicodeDecodeError: {e}')
+                    response = 'none_response'
 
-        self.response = None
+            self.response = None
+        finally:
+            self.lock.release()
 
         return response
 
@@ -355,7 +369,7 @@ class CmdController:
         if self.imperial is True:
             distance = int(round(distance * 30.48))
         else:
-            distance = int(round(distance * 100))
+            distance = int(round(distance * 30))
 
         result = self.send_command('%s %s' % (direction, distance))
         print(f'move: {result}')
@@ -446,8 +460,16 @@ class CmdController:
 
         return self.move('up', distance)
 
+    def stop(self):
+        return self.send_command('stop')
+
     def start_video(self):
+        self.send_command('command')
         return self.send_command('streamon')
+
+    def stop_video(self):
+        self.send_command('command')
+        return self.send_command('streamoff')
 
 
 class DroneController:
@@ -457,7 +479,7 @@ class DroneController:
 
         self._cmd_controller = CmdController(self.socket, self.tello_address)
 
-        self._video_receiver = VideoReceiver(self.socket, *self.tello_address)
+        self._video_receiver = VideoReceiver(*self.tello_address)
 
     def _create_socket(self, local_ip, local_port):
         while True:
@@ -511,6 +533,9 @@ class DroneController:
     def flip_r(self):
         self._cmd_controller.flip('r')
 
+    def stop(self):
+        self._cmd_controller.stop()
+
     def get_speed(self):
         speed = self._cmd_controller.get_speed()
         return self._correct_data(speed)
@@ -537,6 +562,12 @@ class DroneController:
 
         return None
 
-    def get_video_package(self):
-        self._cmd_controller.start_video()
-        return self._video_receiver.get_video_package()
+    def start_video(self):
+        self._video_receiver.start_video()
+        return self._cmd_controller.start_video()
+
+    def stop_video(self):
+        return self._cmd_controller.stop_video()
+
+    def get_batch_file_path(self):
+        return self._video_receiver.get_batch_file_path()

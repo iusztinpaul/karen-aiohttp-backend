@@ -74,10 +74,8 @@ class CommandWebSocketView(DroneWebSocketView):
             command = await websocket.receive_str()
             command = command.upper()
 
-            if command == Commands.TAKEOFF:
-                self.dc.takeoff()
-            elif command == Commands.LAND:
-                self.dc.land()
+            if command == Commands.STOP:
+                self.dc.stop()
             elif command == Commands.FORWARD:
                 self.dc.forward()
             elif command == Commands.BACKWARDS:
@@ -94,6 +92,10 @@ class CommandWebSocketView(DroneWebSocketView):
                 self.dc.rotate_cw()
             elif command == Commands.R_CCW:
                 self.dc.rotate_ccw()
+            elif command == Commands.TAKEOFF:
+                self.dc.takeoff()
+            elif command == Commands.LAND:
+                self.dc.land()
             elif command == Commands.F_B:
                 self.dc.flip_b()
             elif command == Commands.F_F:
@@ -102,6 +104,10 @@ class CommandWebSocketView(DroneWebSocketView):
                 self.dc.flip_l()
             elif command == Commands.F_R:
                 self.dc.flip_r()
+            elif command == Commands.START_VIDEO:
+                self.dc.start_video()
+            elif command == Commands.STOP_VIDEO:
+                self.dc.stop_video()
 
 
 class StatusWebSocketView(DroneWebSocketView):
@@ -116,7 +122,12 @@ class StatusWebSocketView(DroneWebSocketView):
             await asyncio.sleep(2)
 
 
-class VideoWebSocketView(DroneWebSocketView):
-    async def handler(self, websocket):
-        for video_package in self.dc.get_video_package():
-            await websocket.send_bytes(video_package)
+class HlsVideoView(web.View):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dc = get_drone_controller()
+
+    async def get(self):
+        batch_file_path = self.dc.get_batch_file_path()
+
+        return web.FileResponse(batch_file_path)
