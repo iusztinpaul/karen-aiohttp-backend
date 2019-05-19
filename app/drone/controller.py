@@ -1,11 +1,9 @@
 import logging
-import os
 import re
 import socket
+import subprocess
 import time
 import threading
-
-from multiprocessing.pool import ThreadPool
 
 import ffmpeg
 
@@ -18,8 +16,7 @@ MAX_TIME_OUT = 15.0
 class VideoReceiver:
     VS_UDP_IP = '0.0.0.0'
     VS_UDP_PORT = 11111
-
-    H265_BATCH_SIZE = 100
+    OUTFILE = "./stream/stream.m3u8"
 
     def __init__(self, tello_ip, tello_port):
         self.tello_address = (tello_ip, tello_port)
@@ -34,59 +31,52 @@ class VideoReceiver:
 
         self.receive_raw_video_thread = threading.Thread(target=self._receive_raw_data_handler)
 
-        self.pipe_h264 = (
+        self.stream = (
             ffmpeg
-                .input('pipe:0', format='rawvideo')
-                .output('../stream', format='hls', start_number=0, hls_time=1, hls_list_size=0)
+                .input('pipe:0')
+                .output(self.OUTFILE, format='hls', start_number=0, hls_time=1, hls_list_size=0)
+                .overwrite_output()
+                .compile()
         )
 
+    # def read_in_chunks(self, file, chunk_size=1024):
+    #     while True:
+    #         data = file.read(chunk_size)
+    #         if not data:
+    #             break
+    #         yield data
+
     def _receive_raw_data_handler(self):
-        """
-        Listens for video streaming (raw h264) from the Tello.
 
-        Runs as a thread, sets self.frame to the most recent frame Tello captured.
+        proc_stream = subprocess.Popen(self.stream, stdin=subprocess.PIPE)
 
-        """
         packet_data = b''
-
         while not self.stopped:
             try:
+                # print(os.getcwd())
+                # f = open("./stream/data", 'rb')
+                # for chunk in self.read_in_chunks(f):
+                #     proc_stream.stdin.write(chunk)
+                # f.close()
+
                 res_string, ip = self.socket_video.recvfrom(2048)
                 packet_data += res_string
                 # end of frame
                 if len(res_string) != 1460:
-                    self.pipe_h264.stdin.write(packet_data)
-
+                    proc_stream.stdin.write(packet_data)
                     packet_data = b''
 
             except socket.error as exc:
                 print("Caught exception socket.error : {}".format(exc))
 
+        proc_stream.terminate()
         self.stopped = False
-
-    def get_batch_file_path(self):
-        pool = ThreadPool(processes=1)
-        async_result = pool.apply_async(self._remove_m3u8_handler, (m3u8_dir_path, ))
-
-        return async_result.get()
-
-    def _remove_m3u8_handler(self, m3u8_dir_path):
-        yield m3u8_dir_path
-
-        if os.path.exists(m3u8_dir_path):
-            os.remove(m3u8_dir_path)
 
     def start_video(self):
         self.receive_raw_video_thread.start()
-        self.h264_to_m3u8_filter.filter()
 
     def stop_video(self):
         self.stopped = True
-        self.h264_to_m3u8_filter.stop()
-
-        self.pipe_h264.clear()
-        self.pipe_m3u8.clear()
-
 
 class CmdController:
     def __init__(self, socket, tello_address, imperial=False, command_timeout=.3):
