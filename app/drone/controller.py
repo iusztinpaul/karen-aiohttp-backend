@@ -67,7 +67,7 @@ class VideoReceiver:
                     packet_data = b''
 
             except socket.error as exc:
-                print("Caught exception socket.error : {}".format(exc))
+                logger.error("Caught exception socket.error : {}".format(exc))
 
         proc_stream.terminate()
         self.stopped = False
@@ -109,7 +109,7 @@ class CmdController:
         try:
             self.lock.acquire(True, timeout=0.05)
 
-            print(">> send cmd: {}".format(command))
+            logger.info(">> send cmd: {}".format(command))
             self.abort_flag = False
             timer = threading.Timer(self.command_timeout, self.set_abort_flag)
 
@@ -127,7 +127,7 @@ class CmdController:
                 try:
                     response = self.response.decode('utf-8')
                 except UnicodeDecodeError as e:
-                    print(f'UnicodeDecodeError: {e}')
+                    logger.info(f'UnicodeDecodeError: {e}')
                     response = 'none_response'
 
             self.response = None
@@ -166,7 +166,7 @@ class CmdController:
             try:
                 self.response, ip = self.socket.recvfrom(3000)
             except socket.error as exc:
-                print("Caught exception socket.error : %s".format(exc))
+                logger.info("Caught exception socket.error : %s".format(exc))
 
     @property
     def get_status(self):
@@ -182,7 +182,7 @@ class CmdController:
         """
 
         result = self.send_command('takeoff')
-        print(f'Takeoff: {result}')
+        logger.info(f'Takeoff: {result}')
         return result
 
     def set_speed(self, speed):
@@ -225,7 +225,7 @@ class CmdController:
         """
 
         result = self.send_command('cw %s' % degrees)
-        print(f'rotate_cw: {result}')
+        logger.info(f'rotate_cw: {result}')
 
         return result
 
@@ -241,7 +241,7 @@ class CmdController:
 
         """
         result = self.send_command('ccw %s' % degrees)
-        print(f'rotate_ccw: {result}')
+        logger.info(f'rotate_ccw: {result}')
 
         return result
 
@@ -333,7 +333,7 @@ class CmdController:
         """
 
         result = self.send_command('land')
-        print(f'Land: {result}')
+        logger.info(f'Land: {result}')
         return result
 
     def move(self, direction, distance):
@@ -362,7 +362,7 @@ class CmdController:
             distance = int(round(distance * 30))
 
         result = self.send_command('%s %s' % (direction, distance))
-        print(f'move: {result}')
+        logger.info(f'move: {result}')
 
         return result
 
@@ -478,7 +478,7 @@ class DroneController:
                 s.bind((local_ip, local_port))
                 return s
             except OSError as e:
-                print(f'Error on creating socket. Retrying in 0.5s : {e}')
+                logger.info(f'Error on creating socket. Retrying in 0.5s : {e}')
                 time.sleep(0.5)
 
     def land(self):
@@ -558,6 +558,3 @@ class DroneController:
 
     def stop_video(self):
         return self._cmd_controller.stop_video()
-
-    def get_batch_file_path(self):
-        return self._video_receiver.get_batch_file_path()
