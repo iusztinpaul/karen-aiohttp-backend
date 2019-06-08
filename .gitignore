@@ -12,6 +12,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea
 
 # Generated files
 .idea/**/contentModel.xml
@@ -196,6 +197,7 @@ ipython_config.py
 
 # pyenv
 .python-version
+./**/__pycache__
 
 # pipenv
 #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
