@@ -8,6 +8,16 @@ verify_ssl = true
 [packages]
 aiohttp = "*"
 numpy = "*"
+ffmpeg = "*"
+tensorflow = "*"
+scipy = "*"
+requests = "*"
+aiohttp-requests = "*"
+opencv-python = "*"
+pillow = "*"
+matplotlib = "*"
+h5py = "*"
+keras = "*"
 
 [requires]
 python_version = "3.7"

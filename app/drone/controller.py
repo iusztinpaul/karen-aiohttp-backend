@@ -1,84 +1,82 @@
+import logging
 import re
 import socket
+import subprocess
 import time
 import threading
-from multiprocessing.pool import ThreadPool
 
-import numpy as np
+# import ffmpeg
+
+logger = logging.getLogger(__name__)
 
 
 MAX_TIME_OUT = 15.0
 
 
-class VideoReceiver:
-    def __init__(self, cmd_socket, tello_ip, tello_port):
-        # self.decoder = libh264decoder.H264Decoder()
-
-        self.frame = None  # numpy array BGR -- current camera output frame
-        self._get_video = True
-
-        self.tello_address = (tello_ip, tello_port)
-
-        self.cmd_socket = cmd_socket
-
-        self.socket_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # socket for receiving video stream
-        self.local_video_port = 11111  # port for receiving video stream
-
-        self.socket_video.bind(('', self.local_video_port))
-
-    def get_video_package(self):
-        pool = ThreadPool(processes=1)
-        async_result = pool.apply_async(self._receive_video_handler)
-
-        return async_result.get()
-
-    def _receive_video_handler(self):
-        """
-        Listens for video streaming (raw h264) from the Tello.
-
-        Runs as a thread, sets self.frame to the most recent frame Tello captured.
-
-        """
-        packet_data = b''
-        while self._get_video:
-            try:
-                res_string, ip = self.socket_video.recvfrom(2048)
-                packet_data += res_string
-                # end of frame
-                if len(res_string) != 1460:
-                    for frame in self._h264_decode(packet_data):
-                        self.frame = frame
-                    yield packet_data
-                    packet_data = b''
-            except socket.error as exc:
-                print("Caught exception socket.error : %s".format(exc))
-
-        self._get_video = True
-
-    def stop_video(self):
-        self._get_video = False
-
-    def _h264_decode(self, packet_data):
-        """
-        decode raw h264 format data from Tello
-
-        :param packet_data: raw h264 data array
-
-        :return: a list of decoded frame
-        """
-        res_frame_list = []
-        frames = self.decoder.decode(packet_data)
-        for framedata in frames:
-            (frame, w, h, ls) = framedata
-            if frame is not None:
-                # print 'frame size %i bytes, w %i, h %i, linesize %i' % (len(frame), w, h, ls)
-
-                frame = np.fromstring(frame, dtype=np.ubyte, count=len(frame), sep='')
-                frame = (frame.reshape((h, ls / 3, 3)))
-                frame = frame[:, :w, :]
-                res_frame_list.append(frame)
-
-        return res_frame_list
+# class VideoReceiver:
+#     VS_UDP_IP = '0.0.0.0'
+#     VS_UDP_PORT = 11111
+#     OUTFILE = "./stream/stream.m3u8"
+#
+#     def __init__(self, tello_ip, tello_port):
+#         self.tello_address = (tello_ip, tello_port)
+#         self.cap = None
+#
+#         self.grabbed = None
+#         self.frame = None
+#         self.stopped = False
+#
+#         self.socket_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # socket for receiving video stream
+#         self.socket_video.bind(('', self.VS_UDP_PORT))
+#
+#         self.receive_raw_video_thread = threading.Thread(target=self._receive_raw_data_handler)
+#
+#         self.stream = (
+#             ffmpeg
+#                 .input('pipe:0')
+#                 .output(self.OUTFILE, format='hls', start_number=0, hls_time=1, hls_list_size=0)
+#                 .overwrite_output()
+#                 .compile()
+#         )
+#
+#     # def read_in_chunks(self, file, chunk_size=1024):
+#     #     while True:
+#     #         data = file.read(chunk_size)
+#     #         if not data:
+#     #             break
+#     #         yield data
+#
+#     def _receive_raw_data_handler(self):
+#
+#         proc_stream = subprocess.Popen(self.stream, stdin=subprocess.PIPE)
+#
+#         packet_data = b''
+#         while not self.stopped:
+#             try:
+#                 # print(os.getcwd())
+#                 # f = open("./stream/data", 'rb')
+#                 # for chunk in self.read_in_chunks(f):
+#                 #     proc_stream.stdin.write(chunk)
+#                 # f.close()
+#
+#                 res_string, ip = self.socket_video.recvfrom(2048)
+#                 packet_data += res_string
+#                 # end of frame
+#                 if len(res_string) != 1460:
+#                     proc_stream.stdin.write(packet_data)
+#                     packet_data = b''
+#
+#             except socket.error as exc:
+#                 logger.error("Caught exception socket.error : {}".format(exc))
+#
+#         proc_stream.terminate()
+#         self.stopped = False
+#
+#     def start_video(self):
+#         self.receive_raw_video_thread.start()
+#
+#     def stop_video(self):
+#         self.stopped = True
 
 
 class CmdController:
@@ -91,6 +89,8 @@ class CmdController:
         self.command_timeout = command_timeout
         self.imperial = imperial
         self.last_height = 0
+
+        self.lock = threading.Lock()
 
         self._command_thread = threading.Thread(target=self._send_command_handler)
         self._command_thread.start()
@@ -107,28 +107,33 @@ class CmdController:
 
         """
 
-        print(">> send cmd: {}".format(command))
-        self.abort_flag = False
-        timer = threading.Timer(self.command_timeout, self.set_abort_flag)
+        try:
+            self.lock.acquire(True, timeout=0.05)
 
-        self.socket.sendto(command.encode('utf-8'), self.tello_address)
+            logger.info(">> send cmd: {}".format(command))
+            self.abort_flag = False
+            timer = threading.Timer(self.command_timeout, self.set_abort_flag)
 
-        timer.start()
-        while self.response is None:
-            if self.abort_flag is True:
-                break
-        timer.cancel()
+            self.socket.sendto(command.encode('utf-8'), self.tello_address)
 
-        if self.response is None:
-            response = 'none_response'
-        else:
-            try:
-                response = self.response.decode('utf-8')
-            except UnicodeDecodeError as e:
-                print(f'UnicodeDecodeError: {e}')
+            timer.start()
+            while self.response is None:
+                if self.abort_flag is True:
+                    break
+            timer.cancel()
+
+            if self.response is None:
                 response = 'none_response'
+            else:
+                try:
+                    response = self.response.decode('utf-8')
+                except UnicodeDecodeError as e:
+                    logger.info(f'UnicodeDecodeError: {e}')
+                    response = 'none_response'
 
-        self.response = None
+            self.response = None
+        finally:
+            self.lock.release()
 
         return response
 
@@ -162,7 +167,7 @@ class CmdController:
             try:
                 self.response, ip = self.socket.recvfrom(3000)
             except socket.error as exc:
-                print("Caught exception socket.error : %s".format(exc))
+                logger.info("Caught exception socket.error : %s".format(exc))
 
     @property
     def get_status(self):
@@ -178,7 +183,7 @@ class CmdController:
         """
 
         result = self.send_command('takeoff')
-        print(f'Takeoff: {result}')
+        logger.info(f'Takeoff: {result}')
         return result
 
     def set_speed(self, speed):
@@ -221,7 +226,7 @@ class CmdController:
         """
 
         result = self.send_command('cw %s' % degrees)
-        print(f'rotate_cw: {result}')
+        logger.info(f'rotate_cw: {result}')
 
         return result
 
@@ -237,7 +242,7 @@ class CmdController:
 
         """
         result = self.send_command('ccw %s' % degrees)
-        print(f'rotate_ccw: {result}')
+        logger.info(f'rotate_ccw: {result}')
 
         return result
 
@@ -329,7 +334,7 @@ class CmdController:
         """
 
         result = self.send_command('land')
-        print(f'Land: {result}')
+        logger.info(f'Land: {result}')
         return result
 
     def move(self, direction, distance):
@@ -355,10 +360,10 @@ class CmdController:
         if self.imperial is True:
             distance = int(round(distance * 30.48))
         else:
-            distance = int(round(distance * 100))
+            distance = int(round(distance * 30))
 
         result = self.send_command('%s %s' % (direction, distance))
-        print(f'move: {result}')
+        logger.info(f'move: {result}')
 
         return result
 
@@ -446,8 +451,16 @@ class CmdController:
 
         return self.move('up', distance)
 
+    def stop(self):
+        return self.send_command('stop')
+
     def start_video(self):
+        self.send_command('command')
         return self.send_command('streamon')
+
+    def stop_video(self):
+        self.send_command('command')
+        return self.send_command('streamoff')
 
 
 class DroneController:
@@ -457,7 +470,7 @@ class DroneController:
 
         self._cmd_controller = CmdController(self.socket, self.tello_address)
 
-        self._video_receiver = VideoReceiver(self.socket, *self.tello_address)
+        # self._video_receiver = VideoReceiver(*self.tello_address)
 
     def _create_socket(self, local_ip, local_port):
         while True:
@@ -466,7 +479,7 @@ class DroneController:
                 s.bind((local_ip, local_port))
                 return s
             except OSError as e:
-                print(f'Error on creating socket. Retrying in 0.5s : {e}')
+                logger.info(f'Error on creating socket. Retrying in 0.5s : {e}')
                 time.sleep(0.5)
 
     def land(self):
@@ -511,6 +524,9 @@ class DroneController:
     def flip_r(self):
         self._cmd_controller.flip('r')
 
+    def stop(self):
+        self._cmd_controller.stop()
+
     def get_speed(self):
         speed = self._cmd_controller.get_speed()
         return self._correct_data(speed)
@@ -537,6 +553,9 @@ class DroneController:
 
         return None
 
-    def get_video_package(self):
-        self._cmd_controller.start_video()
-        return self._video_receiver.get_video_package()
+    def start_video(self):
+        self._video_receiver.start_video()
+        return self._cmd_controller.start_video()
+
+    def stop_video(self):
+        return self._cmd_controller.stop_video()

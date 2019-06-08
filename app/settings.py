@@ -1,6 +1,7 @@
 class Commands:
     TAKEOFF = 'TAKEOFF'
     LAND = 'LAND'
+    STOP = 'STOP'
     FORWARD = 'FORWARD'
     BACKWARDS = 'BACKWARDS'
     LEFT = 'LEFT'
@@ -13,3 +14,5 @@ class Commands:
     F_L = 'F_L'
     F_F = 'F_F'
     F_B = 'F_B'
+    STOP_VIDEO = 'STOP_VIDEO'
+    START_VIDEO = 'START_VIDEO'

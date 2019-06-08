@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b393cdaf-86ae-4af2-b445-2eddeb45e825" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/drone/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/drone/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,41 +11,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/karen_aiohttp_backend$main.coverage" NAME="main Coverage Results" MODIFIED="1558189337359" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/karen_aiohttp_backend$main.coverage" NAME="main Coverage Results" MODIFIED="1558250099564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/drone/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-111">
-              <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/settings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="121" selection-start-line="121" selection-end-line="121" />
+            <state relative-caret-position="7155">
+              <caret line="482" selection-start-line="482" selection-end-line="482" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -57,19 +28,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/routes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="59" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+              <caret line="5" column="30" lean-forward="true" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -78,19 +40,85 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/drone/__init__.py">
+        <entry file="file://$PROJECT_DIR$/Pipfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
+            <state relative-caret-position="150">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Pipfile">
+        <entry file="file://$PROJECT_DIR$/app/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+            <state relative-caret-position="180">
+              <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+              <folding>
+                <element signature="e#24#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/routes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="6" selection-end-column="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="31" lean-forward="true" selection-start-line="1" selection-start-column="4" selection-end-line="17" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1755">
+              <caret line="124" column="6" selection-start-line="124" selection-start-column="6" selection-end-line="124" selection-end-column="6" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/image_recognition/image_process.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1005">
+              <caret line="74" column="59" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/image_recognition/recognition.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="550">
+              <caret line="43" column="30" lean-forward="true" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/imageai/Detection/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="8445">
+              <caret line="581" column="40" selection-start-line="581" selection-start-column="30" selection-end-line="581" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -117,8 +145,9 @@
       <find>get_heigh</find>
       <find>get_heig</find>
       <find>b</find>
-      <find>get_height</find>
       <find>get_Ba</find>
+      <find>self.frame</find>
+      <find>get_height</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -130,17 +159,25 @@
         <option value="$PROJECT_DIR$/app/middlewares/websockets.py" />
         <option value="$PROJECT_DIR$/app/drone/libh264decoder.py" />
         <option value="$PROJECT_DIR$/app/drone/stats.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/app/__init__.py" />
         <option value="$PROJECT_DIR$/app/drone/__init__.py" />
         <option value="$PROJECT_DIR$/app/settings.py" />
         <option value="$PROJECT_DIR$/app/routes.py" />
         <option value="$PROJECT_DIR$/app/views.py" />
+        <option value="$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/pipes.py" />
+        <option value="$PROJECT_DIR$/app/pipes_and_filters/common/handlers.py" />
+        <option value="$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/filters.py" />
+        <option value="$PROJECT_DIR$/app/drone/pipes_and_filters.py" />
+        <option value="$PROJECT_DIR$/Pipfile" />
+        <option value="$PROJECT_DIR$/app/image_recognition/process.py" />
         <option value="$PROJECT_DIR$/app/drone/controller.py" />
+        <option value="$PROJECT_DIR$/app/image_recognition/image_process.py" />
+        <option value="$PROJECT_DIR$/app/image_recognition/recognition.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="777" />
@@ -151,7 +188,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -168,12 +204,19 @@
               <item name="karen-aiohttp-backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="karen-aiohttp-backend" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="drone" type="462c0819:PsiDirectoryNode" />
+              <item name="image_recognition" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="karen-aiohttp-backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="karen-aiohttp-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="photos" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -185,6 +228,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/image_recognition" />
       <recent name="$PROJECT_DIR$/app/drone" />
       <recent name="$PROJECT_DIR$/app" />
     </key>
@@ -243,37 +287,40 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1558105231214</updated>
-      <workItem from="1558105235349" duration="31745000" />
+      <workItem from="1558105235349" duration="73836000" />
+      <workItem from="1558245848310" duration="4474000" />
+      <workItem from="1559051798673" duration="867000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31745000" />
+    <option name="totallyTimeSpent" value="79177000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="777" extended-state="0" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20113085" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2714055" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" weight="0.3051095" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.329927" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3138686" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32846716" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.40729928" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3109489" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="SciView" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.329927" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.37534246" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.329927" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,20 +330,55 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/views.py</url>
+          <line>43</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/drone/controller.py</url>
-          <line>15</line>
-          <option name="timeStamp" value="3" />
+          <line>73</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/filters.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/image_recognition/image_process.py</url>
+          <line>75</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/image_recognition/recognition.py</url>
+          <line>39</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/image_recognition/recognition.py</url>
+          <line>77</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/image_recognition/recognition.py</url>
+          <line>38</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="h264decoder" language="Python" />
+        <watch expression="input_image_folder.split('/')[-1]" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>input_image_folder.split('/')[-1]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>h264decoder</expression-string>
         <language-id>Python</language-id>
@@ -312,22 +394,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/py-h264-decoder/.idea/vcs.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/py_h264_decoder/pps_1.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/drone/stats.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/websockets.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/py-h264-decoder/.idea/vcs.xml" />
+    <entry file="file://$PROJECT_DIR$/app/py_h264_decoder/pps_1.json" />
+    <entry file="file://$PROJECT_DIR$/app/drone/stats.py" />
+    <entry file="file://$PROJECT_DIR$/app/websockets.py" />
     <entry file="file://$PROJECT_DIR$/app/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -338,47 +408,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/__init__.py">
+    <entry file="file://$PROJECT_DIR$/app/libh264decoder.py" />
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ctypes/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-          <folding>
-            <element signature="e#24#47#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="245">
+          <caret line="355" selection-start-line="355" selection-end-line="355" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/libh264decoder.py">
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2018.3/python_stubs/-1133625354/cv2/cv2/VideoCapture.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="1090">
+          <caret line="185" column="8" selection-start-line="185" selection-start-column="8" selection-end-line="185" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/cv2/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="30">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/settings.py">
+    <entry file="file://$PROJECT_DIR$/app/models.py" />
+    <entry file="file://$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/main.py" />
+    <entry file="file://$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/pipes.py" />
+    <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/ffmpeg/ffmpeg.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="125">
+          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pipfile">
+    <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/ffmpeg/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+        <state relative-caret-position="15">
+          <caret line="1" column="24" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -389,37 +455,118 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/routes.py">
+    <entry file="file://$PROJECT_DIR$/app/pipes_and_filters/common/handlers.py" />
+    <entry file="file://$PROJECT_DIR$/app/pipes_and_filters/pipes_and_filters/filters.py" />
+    <entry file="file://$PROJECT_DIR$/app/drone/pipes_and_filters.py" />
+    <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/aiohttp/web.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="59" selection-start-line="5" selection-start-column="59" selection-end-line="5" selection-end-column="59" />
+        <state relative-caret-position="127">
+          <caret line="39" column="4" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views.py">
+    <entry file="file://$PROJECT_DIR$/app/image_recognition/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/h5py/_hl/files.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="121" selection-start-line="121" selection-end-line="121" />
+        <state relative-caret-position="115">
+          <caret line="169" selection-start-line="169" selection-end-line="169" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/threading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="884" selection-start-line="884" selection-end-line="884" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/drone/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7155">
+          <caret line="482" selection-start-line="482" selection-end-line="482" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ctypes/__init__.py">
+    <entry file="file://$PROJECT_DIR$/app/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="355" selection-start-line="355" selection-end-line="355" />
+        <state relative-caret-position="180">
+          <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+          <folding>
+            <element signature="e#24#47#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/drone/controller.py">
+    <entry file="file://$PROJECT_DIR$/app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-111">
-          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+        <state relative-caret-position="1755">
+          <caret line="124" column="6" selection-start-line="124" selection-start-column="6" selection-end-line="124" selection-end-column="6" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/image_recognition/image_process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1005">
+          <caret line="74" column="59" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.local/share/virtualenvs/karen-aiohttp-backend-jkY7B6Se/lib/python3.7/site-packages/imageai/Detection/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8445">
+          <caret line="581" column="40" selection-start-line="581" selection-start-column="30" selection-end-line="581" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/image_recognition/recognition.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="43" column="30" lean-forward="true" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="30" lean-forward="true" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pipfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/routes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="6" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="31" lean-forward="true" selection-start-line="1" selection-start-column="4" selection-end-line="17" selection-end-column="31" />
         </state>
       </provider>
     </entry>
