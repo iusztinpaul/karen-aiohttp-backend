@@ -1,5 +1,5 @@
 # Karen the Drone
-## Garbage Object Detector with Deep Learning
+## Drone Garbage Object Detector with Deep Learning
 
 
 Microservice that communicates with a Tellur Drone by `UDP`. By an API built in `aiohttp` you can:
